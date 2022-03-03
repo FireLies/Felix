@@ -1,5 +1,5 @@
 # Felix
-This funcion will perform a deletion of contents from file(s) without removing the file
+This function will perform a deletion of contents from file(s) without removing the file
 
 Usage:  felix [-Extension] [-Path]
 
