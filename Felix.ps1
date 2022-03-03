@@ -1,18 +1,24 @@
-$ErrorActionPreference = 'silentlycontinue'
+$ErrorActionPreference = 'SilentlyContinue'
 
-function Write-Color($Text, $Color) {
+function Write-Color {
+
+    param (
+        [Parameter()][string]$Text,
+        [Parameter(Mandatory=$false)][string]$Color = 'White'
+    )
 
     $TextColor = @{
         Object = $Text;
         ForegroundColor = $Color;
-        NoNewline=$true
+        NoNewline = $true
     }
 
     Write-Host @TextColor
+
 }
 
-Write-Host "`nHello Felix! -| v1.5 |- FireLies 2022" 
-Write-Color "`nUsage:" -Color 'Cyan'; Write-Host " felix [-Extension] [-Path]`n`n"
+Write-Color "`nHello Felix! -| v1.6 |- FireLies 2022`n" 
+Write-Color "`nUsage:" -Color Cyan; Write-Color " felix [-Extension] [-Path]`n`n"
 
 function Felix {
 
@@ -25,9 +31,9 @@ function Felix {
             $ExtSet = '.docx', '.doc', '.pdf', '.pptx', '.xlsx', '.xls', '.txt', '.mp4', '.mp3', '.jpg', '.jpeg', '.png', '*'
 
             if (($_ -notin $ExtSet) -or (!($_))) {
-                Write-Host "`nPlease assign the extension parameter correctly `nValid extensions:" -NoNewline; Write-Host @Color " $($ExtSet -join ', ')"
-                Write-Color "`nTIPS:" -Color 'Cyan'; Write-Host " --Use felix * to select all extensions `n      --Use separator (,) to assign more than 1`n"
-                $false; exit
+                Write-Color "`nPlease assign the extension parameter correctly `nValid extensions: "; Write-Color "$($ExtSet -join ', ')`n" -Color 'Cyan'
+                Write-Color "`nTIPS:" -Color 'Cyan'; Write-Color " --Use felix * to select all extensions `n      --Use separator (,) to assign more than 1`n`n"
+                $false; break
             }
 
             $true
@@ -41,29 +47,37 @@ function Felix {
 
     ""
     if (!(Test-Path "$Path")) {
-        Write-Host "$Path does not exist. Please check the name correctly`n" -ForegroundColor "Red"
-        break
+        Write-Color "$Path does not exist. Please check the name correctly`n"
+        ""; break
     }
 
-    foreach ($Value in $Extension) {
-        Write-Color "--Trying: $Value" -Color 'Cyan'; Write-Host " starting from $Path"
+    Write-Color "The following proccess will be done recursively. You're on your own`n" -Color 'Cyan'
+    cmd /c Pause
 
-        
-        foreach ($File in (Get-ChildItem "$Path\" -Recurse -Filter *$Value -Name)) {
+    ""
+    foreach ($Value in $Extension) {
+        Write-Color "--Trying: $Value" -Color 'Cyan'; Write-Color " in $Path\...`n"
+
+        $GetName = @()
+        foreach ($File in ($GetName += Get-ChildItem "$Path\" -Recurse -Filter *$Value -Name)) {
             Out-Null | Out-File "$Path\$File" -Force
 
             if ((Get-Item "$Path\$File" | ForEach-Object {[int]($_.length /1kb)}) -eq 0) {
-                Write-Color "O" -Color 'Green'; Write-Host " $Path\$File"
+                Write-Color "O" -Color 'Green'; Write-Color " $Path\$File`n"
                 $Success++
             } else {
-                Write-Color "X" -Color 'Red'; Write-Host " $Path\$File"
+                Write-Color "X" -Color 'Red'; Write-Color " $Path\$File`n"
                 $Failed++
             }
+        }
+        
+        if ($GetName.Length -eq 0) {
+            Write-Color "--Cannot find $Value file(s)`n"
         }
 
         ""
     }
 
-    Write-Color "  Success: $Success  //  Failed: $Failed" -Color 'Cyan'; ""
+    Write-Color "  Success: $Success  //  Failed: $Failed`n" -Color 'Cyan'
     ""
 }
