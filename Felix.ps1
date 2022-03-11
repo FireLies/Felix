@@ -19,6 +19,7 @@ function Write-Color {
 
 Write-Color "`nHello Felix! -| v1.6 |- FireLies 2022`n" 
 Write-Color "`nUsage:" -Color Cyan; Write-Color " felix [-Extension] [-Path]`n`n"
+""
 
 function Felix {
 
@@ -56,22 +57,18 @@ function Felix {
 
     ""
     foreach ($Value in $Extension) {
-        Write-Color "--Trying: $Value" -Color 'Cyan'; Write-Color " in $Path\...`n"
 
-        $GetName = @()
-        foreach ($File in ($GetName += Get-ChildItem "$Path\" -Recurse -Filter *$Value -Name)) {
+        Write-Color "--Trying: $Value" -Color 'Cyan'; Write-Color " in $Path\...`n"
+        foreach ($File in ([string[]]$GetName = Get-ChildItem "$Path\" -Recurse -Filter *$Value -Name)) {
             Out-Null | Out-File "$Path\$File" -Force
 
-            if ((Get-Item "$Path\$File" | ForEach-Object {[int]($_.length /1kb)}) -eq 0) {
-                Write-Color "O" -Color 'Green'; Write-Color " $Path\$File`n"
-                $Success++
-            } else {
-                Write-Color "X" -Color 'Red'; Write-Color " $Path\$File`n"
-                $Failed++
+            switch ([int[]](Get-Item "$Path\$File" | ForEach-Object {[int]($_.length /1kb)})) {
+                0 {Write-Color "O" -Color 'Green'; Write-Color " $Path\$File`n"; $Success++}
+                default {Write-Color "X" -Color 'Red'; Write-Color " $Path\$File`n"; $Failed++}
             }
         }
         
-        if ($GetName.Length -eq 0) {
+        if ($GetName.length -eq 0) {
             Write-Color "--Cannot find $Value file(s)`n"
         }
 
