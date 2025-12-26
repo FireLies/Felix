@@ -1,9 +1,10 @@
 # Felix
-This script will perform a removal of contents from file(s) without deleting the file.
+This script will perform a removal of contents from file(s) by overwriting them in multiple iterations.
 
-Usage:  felix [-Extension] [-Path]
+Setup: Import-Module .\Felix.ps1  
+Usage: Felix -e [Extensions] -p [Path] -n [iteration (default is 3)] -r [recurse]
 
-- You can assign more than 1 extension at once
-- Use felix * [-Path] to select all extensions
-- The [-Path] parameter is optional, default value: C:\Users\\[Environment]::UserName\Documents
-- Felix works recursively, so be careful!
+- Use ',' separator for multiple extensions
+- Use '*' to assign all extensions that exist in the selected path
+- More iteration will take longer to process, especially for path with many sub directories
+- Recurse mode is optional. Default is off
