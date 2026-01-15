@@ -11,6 +11,7 @@ function Felix_Home {
  <> Usage: Felix -e [Extensions] -p [Path] -n [iteration (default is 3)] -r [recurse]
  <> Use ',' separator for multiple extensions
  <> Use '*' to assign all extensions that exist in the selected path
+ <> Use Felix_Home to show this home menu
 
 "@
 }
