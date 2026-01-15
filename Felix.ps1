@@ -1,3 +1,4 @@
+function Felix_Home {
 @"
   _____       _    0  _    _ 
  |  ___| ___ | |   _ \ \  / /
@@ -12,6 +13,7 @@
  <> Use '*' to assign all extensions that exist in the selected path
 
 "@
+}
 
 function Felix {
     param (
@@ -133,3 +135,5 @@ function Felix {
     }
     ""
 }
+
+Felix_Home
