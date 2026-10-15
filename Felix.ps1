@@ -1,7 +1,7 @@
 <#
 Author      : Johannes Titor
 Version     : 2.2
-Lase update : Sept 2026
+Last update : Sept 2026
 PowerShell  : 5.1
 #>
 
