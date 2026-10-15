@@ -1,22 +1,24 @@
 <#
 Author      : Johannes Titor
-Version     : 2.2
-Last update : Sept 2026
+Version     : 2.2.1
+Last update : 16 Oct 2026
 PowerShell  : 5.1
 #>
 
 function Home {
 Write-Host @"
                 _   _
-  _____      _   \./      
+  ______     _   \./      
  |  ___/___ | \   _ /\  /\
  |  __/ __ \| |  | |\ \/ /
- | | |  ___/| |__| |/ /\ \  < v2.2 >--< Sept 2026 >
+ | | |  ___/| |__| |/ /\ \  < v2.2.1 >--< 16 Oct 2026 >
  |_/  \____/|____/_|\/  \/  https://github.com/FireLies/Felix
  
 "@ -ForegroundColor Cyan
 
-Write-Host " "
+Write-Host @" 
+ PowerShell: $($PSVersionTable.PSVersion.ToString(2)) | User env: C:\Users\$([Environment]::UserName)`n
+"@ -ForegroundColor DarkCyan
 
 @"
  Wipe file(s) by overwriting them using random bytes
@@ -111,11 +113,9 @@ function Felix {
     # End of user input check
 
     $timeToFinish = [System.Diagnostics.Stopwatch]::StartNew()
-    
     $processList = [System.Collections.Generic.List[string]]::new($itemList)
-
-    $failed, $success= 0, 0
     $failedItems = [System.Collections.Generic.List[string]]::new()
+    $failed, $success= 0, 0
 
     $logDirPath = $PWD.Path + "\Log"
     if (-not (Test-Path $logDirPath)) {
@@ -136,8 +136,8 @@ function Felix {
             $progressCounter++
             $progressPercent = ($progressCounter / $itemList.Count) * 100
             Write-Host "`r[o] Iteration $($iter + 1)/$iterations $("{0:F1}" -f $progressPercent)%  " -NoNewline
+
             $fileStream = $null
-            
             $filePath = "$path\$item"
             
             if (-not(Test-Path -LiteralPath $filePath)) {
@@ -150,9 +150,7 @@ function Felix {
             try {
                 $buffer = New-Object byte[] 4096
                 $randomize = [System.Security.Cryptography.RandomNumberGenerator]::Create()
-
                 $fileStream = [System.IO.File]::Open($filePath, 'Open', 'Write')
-
                 $bytesRemaining = $fileStream.Length
 
                 [void]$fileStream.Seek(0, 'Begin')
